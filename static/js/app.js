@@ -14,7 +14,7 @@ function buildMetadata(sample) {
     // Use `.html("") to clear any existing metadata
     panel.html("");
 
-    // Inside a loop, you will need to use d3 to append new
+    // Inside a loop, you will need to use d3 to append new (loop through the key value pairs of js object)
     // tags for each key-value in the filtered metadata.
     let metadata_keys = Object.keys(metadataresult); // retrieves all the keys from the metadata_result object and stores them in an array called metadata_keys.
     for (let i = 0; i < metadata_keys.length; i++) {
@@ -36,7 +36,8 @@ function buildCharts(sample) {
     let samples = data.samples;
 
     // Filter the samples for the object with the desired sample number
-    samplesresult = samples.filter(obj => obj.id == sample)[0];
+    samplesresult = samples.filter(row => row.id === sample)[0];
+    console.log(samplesresult)
 
     // Get the otu_ids, otu_labels, and sample_values
     let otu_ids = samplesresult.otu_ids;
@@ -52,7 +53,7 @@ function buildCharts(sample) {
       marker: {
         size: sample_values,
         color: otu_ids,
-        colorscale: "firebrick"
+        colorscale: "YlGnBu"
       }
     };
 
@@ -77,7 +78,7 @@ function buildCharts(sample) {
         height: 600
     };
 
-    // Render the bubble chart
+    // Render the bubble chart (IDS=bubble)
     Plotly.newPlot('bubble', bubbletraces, bublelayout);
 
     // Build a Bar Chart
@@ -127,7 +128,7 @@ function init() {
     let names = data.names;
 
     // Use d3 to select the dropdown with id of `#selDataset`
-    let dropdown = d3.select("#selDataset");
+    let dropdown = d3.select("#sselDataset");
 
     // Use the list of sample names to populate the select options
     // Hint: Inside a loop, you will need to use d3 to append a new
@@ -138,7 +139,7 @@ function init() {
       let name = names[i];
 
       // Create option
-      dropdown.append("option").text(name); //.property("value", name);
+      dropdown.append("option").text(name); //.property("value", name); we don't need value
     }
 
 
@@ -155,6 +156,11 @@ function init() {
 function optionChanged(newSample) {
   // Build charts and metadata panel each time a new sample is selected
   buildMetadata(newSample);
+}
+
+function optionChanged(newSample) {
+  // Build charts and metadata panel each time a new sample is selected
+  buildCharts(newSample);
 }
 
 // Initialize the dashboard
